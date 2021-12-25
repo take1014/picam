@@ -12,30 +12,40 @@ void drawText(Mat & image);
 int main()
 {
     cout << "Built with OpenCV " << CV_VERSION << endl;
-    Mat image;
-    VideoCapture capture;
-    capture.open(0);
-    if(capture.isOpened())
+    Mat road_img, driver_img;
+    VideoCapture capture0, capture1;
+    capture0.open(0);
+    capture1.open(2);
+
+    if (!capture0.open(0))
     {
-        cout << "Capture is opened" << endl;
-        for(;;)
-        {
-            capture >> image;
-            if(image.empty())
-                break;
-            drawText(image);
-            imshow("Sample", image);
-            if(waitKey(10) >= 0)
-                break;
-        }
+        cout << "Capture0 is not opened" << endl;
+        return 0;
     }
-    else
+    if (!capture1.open(2))
     {
-        cout << "No capture" << endl;
-        image = Mat::zeros(480, 640, CV_8UC1);
-        drawText(image);
-        imshow("Sample", image);
-        waitKey(0);
+        cout << "Capture1 is not opened" << endl;
+        return 1;
+    }
+    cout << "Capture is opened" << endl;
+    for(;;)
+    {
+        capture0 >> road_img;
+        capture1 >> driver_img;
+        cv::rotate(road_img, road_img, cv::ROTATE_180);
+        cv::rotate(driver_img, driver_img, cv::ROTATE_180);
+        printf("RoadImage->width:%d, height:%d\n", road_img.cols, road_img.rows);
+        printf("DriverImage->width:%d, height:%d\n", driver_img.cols, driver_img.rows);
+        if(road_img.empty())
+            break;
+        if(driver_img.empty())
+            break;
+        drawText(road_img);
+        drawText(driver_img);
+        imshow("road_facing", road_img);
+        imshow("driver_facing", driver_img);
+        if(waitKey(10) >= 0)
+            break;
     }
     return 0;
 }
