@@ -13,13 +13,21 @@ int main()
 {
     cout << "Built with OpenCV " << CV_VERSION << endl;
     Mat road_img, driver_img;
-    VideoCapture capture0, capture1;
-    capture0.open(0);
+    VideoCapture cap;
+    cap.open(0);
+    cap.set(cv::CAP_PROP_FPS, 60);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+
+    int width = (int)cap.get(cv::CAP_PROP_FRAME_WIDTH);
+    int height = (int)cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+    int fps = (int)cap.get(cv::CAP_PROP_FPS);
+    printf("width:%d, height:%d, fps:%d\n", width, height, fps);
     /* capture1.open(2); */
 
-    if (!capture0.open(0))
+    if (!cap.open(0))
     {
-        cout << "Capture0 is not opened" << endl;
+        cout << "cap is not opened" << endl;
         return 0;
     }
     /* if (!capture1.open(2)) */
@@ -30,11 +38,11 @@ int main()
     cout << "Capture is opened" << endl;
     for(;;)
     {
-        capture0 >> road_img;
+        cap >> road_img;
         /* capture1 >> driver_img; */
         cv::rotate(road_img, road_img, cv::ROTATE_180);
         /* cv::rotate(driver_img, driver_img, cv::ROTATE_180); */
-        printf("RoadImage->width:%d, height:%d\n", road_img.cols, road_img.rows);
+        // printf("RoadImage->width:%d, height:%d\n", road_img.cols, road_img.rows);
         /* printf("DriverImage->width:%d, height:%d\n", driver_img.cols, driver_img.rows); */
         if(road_img.empty())
             break;
