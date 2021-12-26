@@ -7,7 +7,6 @@
 using namespace cv;
 using namespace std;
 
-void drawText(Mat &image, char *s, int w, int h);
 
 int main()
 {
@@ -17,7 +16,7 @@ int main()
     cap.open(0);
     cap.set(cv::CAP_PROP_FPS, 60);
     cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
 
     int width = (int)cap.get(cv::CAP_PROP_FRAME_WIDTH);
     int height = (int)cap.get(cv::CAP_PROP_FRAME_HEIGHT);
@@ -39,6 +38,7 @@ int main()
     for(;;)
     {
         cap >> road_img;
+
         /* capture1 >> driver_img; */
         cv::rotate(road_img, road_img, cv::ROTATE_180);
         /* cv::rotate(driver_img, driver_img, cv::ROTATE_180); */
@@ -53,10 +53,10 @@ int main()
                     Scalar(255, 255, 255), // white
                     1, LINE_AA); // line thickness and type
 
-        /* drawText(driver_img); */
         cv::namedWindow("road_facing", cv::WINDOW_NORMAL);
-        cv::setWindowProperty("road_facing", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
+        // cv::setWindowProperty("road_facing", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
         cv::imshow("road_facing", road_img);
+        cv::moveWindow("road_facing", 30, 40);
         /* imshow("driver_facing", driver_img); */
         if(waitKey(10) >= 0)
             break;
